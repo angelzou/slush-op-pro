@@ -1,18 +1,18 @@
 {
-  "name": "slush-g-test",
+  "name": "slush-op-pro",
   "description": "gulp test",
   "version": "0.1.0",
-  "homepage": "https://github.com/AngelZou/slush-g-test",
+  "homepage": "https://github.com/angelzou/slush-op-pro",
   "author": {
     "name": "angelzou",
     "email": "angelzou@tencent.com"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/AngelZou/slush-g-test.git"
+    "url": "git://github.com/angelzou/slush-op-pro.git"
   },
   "bugs": {
-    "url": "https://github.com/AngelZou/slush-g-test/issues"
+    "url": "https://github.com/angelzou/slush-op-pro/issues"
   },
   "license": "MIT",
   "main": "slushfile.js",
