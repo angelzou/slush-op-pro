@@ -1,0 +1,24 @@
+{
+  "appName": "<%= appName %>",
+  "author": {
+    "name": "<%= authorName %>",
+    "email": "<%= authorEmail %>"
+  },
+  "src": {
+        "bower": "./bower_components",
+        "css": "./css",
+        "scss": "./scss/*.scss",
+        "js": [
+            "./widget/example.js",      // 依赖的js文件，写在入口文件前面
+            "./<%= appName %>/index.js" // 该应用的入口js文件，
+                                        // 如果需要加载其它js组件，写在该文件前面
+        ],
+        "img": "./img/**/*"
+    },
+    "dest": {
+        "bower": "./assets/lib",
+        "css": "./<%= appName %>/assets",
+        "js": "./<%= appName %>/assets",
+        "img": "./assets/img"
+    }
+}
