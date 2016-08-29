@@ -9,9 +9,8 @@
         "css": "./css",
         "scss": "./scss/*.scss",
         "js": [
-            "./widget/example.js",      // 依赖的js文件，写在入口文件前面
-            "./sr/<%= appName %>/index.js" // 该应用的入口js文件，
-                                        // 如果需要加载其它js组件，写在该文件前面
+            "./widget/example.js",
+            "./sr/<%= appName %>/index.js"
         ],
         "img": "./img/**/*"
     },
