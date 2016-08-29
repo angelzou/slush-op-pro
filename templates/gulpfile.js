@@ -2,7 +2,7 @@
 /*!
  * gulp
  * $ npm install gulp-sass gulp-minify-css gulp-jshint gulp-concat gulp-uglify gulp-imagemin gulp-notify gulp-livereload
- *   gulp-rename gulp-cache gulp-filter gulp-connect del main-bower-files gulp-order lodash --save-dev
+     gulp-rename gulp-cache gulp-filter gulp-connect del main-bower-files gulp-order lodash --save-dev
  */
 // 引入gulp
 var gulp = require('gulp');
@@ -24,12 +24,38 @@ var mainBowerFiles = require('main-bower-files'),
     connect = require('gulp-connect'),
     order = require('gulp-order'),
     lodash = require('lodash');
-
 var projectConfig = require('./app.js');
 var appName = projectConfig.appName;console.log(appName);
-var appConfig = require(appName + '/bo.json');
+var appConfig = require('./src/' + appName + '/bo.json');
 
 lodash.extend(projectConfig, appConfig);
+
+var formatDate = function(date, fmt) {
+    var o = {
+        "M+": date.getMonth() + 1, //月份
+        "d+": date.getDate(), //日
+        "h+": date.getHours(), //小时
+        "m+": date.getMinutes(), //分
+        "s+": date.getSeconds(), //秒
+        "q+": Math.floor((date.getMonth() + 3) / 3), //季度
+        "S": date.getMilliseconds() //毫秒
+    };
+    if (/(y+)/.test(fmt)) {
+        fmt = fmt.replace(
+            RegExp.$1,
+            (date.getFullYear() + "").substr(4 - RegExp.$1.length)
+        );
+    }
+    for (var k in o) {
+        if (new RegExp("(" + k + ")").test(fmt)) {
+            fmt = fmt.replace(
+                RegExp.$1,
+                (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length))
+            );
+        }
+    }
+    return fmt;
+}
 
 // 过滤文件
 var filterByExtension = function(extension) {
@@ -57,9 +83,11 @@ gulp.task('bower', function() {
 
 // 编译sass, 压缩css
 gulp.task('styles', function(){
+    var t = formatDate(new Date(), 'yyyyMd');
     return gulp.src(projectConfig.src.scss)
         .pipe(sass())
-        .pipe(gulp.dest(projectConfig.src.css))
+        .pipe(concat(projectConfig.appName + '_' + t + '.css'))
+        .pipe(gulp.dest(projectConfig.dest.css))
         .pipe(rename({suffix: '.min'}))
         .pipe(minifycss())
         .pipe(gulp.dest(projectConfig.dest.css))
@@ -68,10 +96,11 @@ gulp.task('styles', function(){
 
 // 检查，合并，压缩js文件
 gulp.task('scripts', function(){
+    var t = formatDate(new Date(), 'yyyyMd');
     return gulp.src(projectConfig.src.js)
         .pipe(jshint())
         .pipe(jshint.reporter('default'))
-        .pipe(concat())
+        .pipe(concat(projectConfig.appName + '_' + t + '.js'))
         .pipe(gulp.dest(projectConfig.dest.js))
         .pipe(rename({suffix: '.min'}))
         .pipe(uglify())
@@ -102,18 +131,22 @@ gulp.task('default',['clean'], function(){
 // watch任务
 gulp.task('watch', function(){
     // 启动web服务
-    connect.server({
-        root: [__dirname],
-        port: 8099,
-        livereload: true
-    })
+    // connect.server({
+    //     root: [__dirname],
+    //     port: 8099,
+    //     livereload: true
+    // })
     // 监听文件变化
     gulp.watch(projectConfig.src.js, ['scripts']);
     gulp.watch(projectConfig.src.scss, ['styles']);
     gulp.watch(projectConfig.src.img, ['images']);
     gulp.watch('./bower_components/**/*', ['bower']);
     // 创建LiveReload服务
-    // livereload.listen();
-    // 监听projectConfig文件夹下面的所有文件，有变化的浏览器就会重新加载
-    // gulp.watch(['./projectConfig/**']).on('change', livereload.changed);
+    // var server = livereload();
+    var options = {
+        host: '你的域名'
+    };
+    livereload.listen(options);
+    // 监听应用文件夹下面的所有文件，有变化的浏览器就会重新加载
+    gulp.watch(['./src/' + projectConfig.appName + '/**']).on('change', livereload.reload);
 });
