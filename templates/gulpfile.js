@@ -144,7 +144,7 @@ gulp.task('watch', function(){
     // 创建LiveReload服务
     // var server = livereload();
     var options = {
-        host: '你的域名'
+        host: projectConfig.host
     };
     livereload.listen(options);
     // 监听应用文件夹下面的所有文件，有变化的浏览器就会重新加载

@@ -9,6 +9,7 @@ module.exports = {
     // 项目中某个应用名称，用于对于应用中的js，css合并时的处理，对于不同的应用
     // 使用gulp命令需要更改此字段为对应应用的名称
     "appName": "appName",
+    "host": "localhost",
     "src": {
         "bower": "./bower_components",
         "css": "./css",
